@@ -1,0 +1,19 @@
+{
+  "name": "bff-stock-market",
+  "description": "BFF for aggregating and formatting Ibovespa stock market data.",
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy --minify",
+    "cf-typegen": "wrangler types --env-interface CloudflareBindings"
+  },
+  "dependencies": {
+    "@hono/standard-validator": "^0.2.2",
+    "hono": "^4.11.5",
+    "zod": "^4.3.6"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20260123.0",
+    "wrangler": "^4.4.0"
+  }
+}
