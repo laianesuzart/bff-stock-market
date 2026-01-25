@@ -14,31 +14,24 @@ export type UnifiedStock = z.infer<typeof UnifiedStockSchema>
 export async function fetchStockQuote(
   symbol: string,
   range: string,
-): Promise<UnifiedStock> {
+): Promise<UnifiedStock[]> {
   const data = await requestMarketData<QuoteRespose>(
     `/quote/${symbol}?range=${range}&interval=1d`,
   )
-  if (!data.results || data.results.length === 0) {
-    throw new Error(`Stock "${symbol}" not found.`)
-  }
-  const stock = data.results[0]
 
-  const history = stock.historicalDataPrice.map((price) => ({
-    price: price.close,
-    date: new Date(price.date * 1000),
-  }))
+  return data.results.map((result) => {
+    const history = result.historicalDataPrice.map((price) => ({
+      price: price.close,
+      date: new Date(price.date * 1000),
+    }))
 
-  history.push({
-    price: stock.regularMarketPrice,
-    date: new Date(stock.regularMarketTime),
+    return {
+      symbol: result.symbol,
+      name: result.longName,
+      logo: result.logourl,
+      history,
+    }
   })
-
-  return {
-    symbol: stock.symbol,
-    name: stock.longName,
-    logo: stock.logourl,
-    history,
-  }
 }
 
 export async function fetchTickers() {

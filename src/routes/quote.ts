@@ -2,7 +2,6 @@ import { sValidator } from '@hono/standard-validator'
 import { Hono } from 'hono'
 import { cache } from 'hono/cache'
 import { z } from 'zod'
-import { fetchTickers } from '../providers/market.provider'
 import { getStockWithHistory } from '../services/stock.service'
 import { normalizeDate } from '../utils/date.utils'
 
@@ -15,12 +14,7 @@ app.get(
     cacheControl: 'max-age=86400',
   }),
   async (c) => {
-    try {
-      const tickers = await fetchTickers()
-      return c.json({ tickers })
-    } catch {
-      return c.json({ tickers: ['ITUB4', 'MGLU3', 'PETR4', 'VALE3'] })
-    }
+    return c.json({ tickers: ['ITUB4', 'MGLU3', 'PETR4', 'VALE3'] })
   },
 )
 
@@ -53,10 +47,13 @@ app.get(
     const { tickers } = c.req.valid('param')
     const { from, to } = c.req.valid('query')
 
-    const stocks = tickers.split(',')
-    const data = await getStockWithHistory(stocks, new Date(from), new Date(to))
+    const data = await getStockWithHistory(
+      tickers,
+      new Date(from),
+      new Date(to),
+    )
 
-    return c.json({ data })
+    return c.json(data)
   },
 )
 
