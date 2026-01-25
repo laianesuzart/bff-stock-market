@@ -1,23 +1,29 @@
-import { getContext } from 'hono/context-storage'
-import { Bindings } from '../types'
+type Request = {
+  endpoint: string
+  token?: string
+  authHeader?: string
+  cacheTtl?: number
+}
 
-export async function requestMarketData<T>(
-  endpoint: string,
-  cacheTtl?: number,
-): Promise<T> {
-  const c = getContext<{ Bindings: Bindings }>()
-  const { MARKET_API_BASE_URL, MARKET_API_KEY } = c.env
-  const url = `${MARKET_API_BASE_URL}${endpoint}`
-
-  const response = await fetch(url, {
+export async function requestMarketData<T>({
+  endpoint,
+  token,
+  cacheTtl,
+  authHeader = 'Authorization',
+}: Request): Promise<T> {
+  const response = await fetch(endpoint, {
     cf: {
       cacheTtl: cacheTtl ?? 4 * 60 * 60,
       cacheEverything: true,
     },
 
-    headers: {
-      Authorization: `Bearer ${MARKET_API_KEY}`,
-    },
+    ...(token
+      ? {
+          headers: {
+            [authHeader]: token,
+          },
+        }
+      : {}),
   })
 
   if (!response.ok) {

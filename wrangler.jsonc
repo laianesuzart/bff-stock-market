@@ -8,6 +8,7 @@
   ],
   "vars": {
     "MARKET_API_BASE_URL": "https://brapi.dev/api",
+    "CURRENCY_API_BASE_URL": "https://economia.awesomeapi.com.br"
   },
   "observability": {
     "enabled": true

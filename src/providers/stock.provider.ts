@@ -1,6 +1,8 @@
 import { z } from 'zod'
 import { QuoteRespose, StockListResponse } from '../types/stock'
 import { requestMarketData } from '../utils/market-data.client'
+import { getContext } from 'hono/context-storage'
+import { Bindings } from '../types'
 
 export const UnifiedStockSchema = z.object({
   symbol: z.string(),
@@ -15,9 +17,11 @@ export async function fetchStockQuote(
   symbol: string,
   range: string,
 ): Promise<UnifiedStock[]> {
-  const data = await requestMarketData<QuoteRespose>(
-    `/quote/${symbol}?range=${range}&interval=1d`,
-  )
+  const c = getContext<{ Bindings: Bindings }>()
+  const data = await requestMarketData<QuoteRespose>({
+    endpoint: `${c.env.MARKET_API_BASE_URL}/quote/${symbol}?range=${range}&interval=1d`,
+    token: `Bearer ${c.env.MARKET_API_KEY}`,
+  })
 
   return data.results.map((result) => {
     const history = result.historicalDataPrice.map((price) => ({
@@ -35,9 +39,11 @@ export async function fetchStockQuote(
 }
 
 export async function fetchTickers() {
-  const data = await requestMarketData<StockListResponse>(
-    '/quote/list?type=stock&sortBy=name&sortOrder=asc',
-    24 * 60 * 60,
-  )
+  const c = getContext<{ Bindings: Bindings }>()
+  const data = await requestMarketData<StockListResponse>({
+    endpoint: `${c.env.MARKET_API_BASE_URL}/quote/list?type=stock&sortBy=name&sortOrder=asc`,
+    token: `Bearer ${c.env.MARKET_API_KEY}`,
+    cacheTtl: 24 * 60 * 60,
+  })
   return data.stocks.map((item) => item.stock)
 }

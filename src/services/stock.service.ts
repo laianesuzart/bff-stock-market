@@ -1,4 +1,4 @@
-import { fetchStockQuote } from '../providers/market.provider'
+import { fetchStockQuote } from '../providers/stock.provider'
 import { calculateRange } from '../utils/date.utils'
 
 export async function getStockWithHistory(
