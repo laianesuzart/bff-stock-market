@@ -9,6 +9,20 @@ import type { Bindings } from './types'
 const app = new Hono<{ Bindings: Bindings }>().basePath('/api')
 
 app.use('*', async (c, next) => {
+  if (!c.env.CORS_ORIGIN || !c.env.MARKET_API_KEY) {
+    console.error('Missing required environment variables:', {
+      CORS_ORIGIN: !!c.env.CORS_ORIGIN,
+      MARKET_API_KEY: !!c.env.MARKET_API_KEY,
+    })
+    return c.json(
+      {
+        error: 'Configuration Error',
+        message: 'Missing required environment variables',
+      },
+      500,
+    )
+  }
+
   const corsMiddlewareHandler = cors({
     origin: c.env.CORS_ORIGIN,
   })
@@ -17,6 +31,8 @@ app.use('*', async (c, next) => {
 app.use('*', contextStorage())
 
 app.onError((error, c) => {
+  console.error('[Global Error Handler]:', error)
+
   if (error instanceof HTTPException) {
     return error.getResponse()
   }
