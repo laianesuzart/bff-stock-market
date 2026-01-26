@@ -8,7 +8,7 @@ app.get(
   '/majors',
   cache({
     cacheName: 'tickers-list',
-    cacheControl: 'max-age=300',
+    cacheControl: 'max-age=3600',
   }),
   async (c) => {
     const currencies = await getMidMarketCurrencyRates()

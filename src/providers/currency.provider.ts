@@ -19,7 +19,7 @@ export async function fetchMajorCurrencies(): Promise<UnifiedCurrency[]> {
     endpoint: `${c.env.CURRENCY_API_BASE_URL}/last/USD-BRL,EUR-BRL,JPY-BRL,GBP-BRL`,
     authHeader: 'x-api-key',
     token: c.env.CURRENCY_API_KEY,
-    cacheTtl: 5 * 60,
+    cacheTtl: 2 * 60 * 60,
   })
   return Object.entries(res).map(([_key, value]) => value)
 }
