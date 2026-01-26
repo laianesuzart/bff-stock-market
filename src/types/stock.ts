@@ -1,11 +1,3 @@
-export type StockListResponse = {
-  stocks: [
-    {
-      stock: string
-    },
-  ]
-}
-
 export type QuoteRespose = {
   results: {
     symbol: string

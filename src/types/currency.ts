@@ -6,5 +6,6 @@ export type CurrencyResponse<T> = {
     bid: string
     ask: string
     pctChange: string
+    create_date: string
   }
 }

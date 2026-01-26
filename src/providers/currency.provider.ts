@@ -9,6 +9,7 @@ export const UnifiedCurrencySchema = z.object({
   bid: z.string(),
   ask: z.string(),
   pctChange: z.string(),
+  create_date: z.iso.date()
 })
 
 export type UnifiedCurrency = z.infer<typeof UnifiedCurrencySchema>
@@ -17,9 +18,6 @@ export async function fetchMajorCurrencies(): Promise<UnifiedCurrency[]> {
   const c = getContext<{ Bindings: Bindings }>()
   const res = await requestMarketData<CurrencyResponse<MajorCurrency>>({
     endpoint: `${c.env.CURRENCY_API_BASE_URL}/last/USD-BRL,EUR-BRL,JPY-BRL,GBP-BRL`,
-    authHeader: 'x-api-key',
-    token: c.env.CURRENCY_API_KEY,
-    cacheTtl: 2 * 60 * 60,
   })
   return Object.entries(res).map(([_key, value]) => value)
 }

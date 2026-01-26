@@ -47,9 +47,7 @@ Antes de começar, certifique-se de ter as seguintes ferramentas instaladas em s
     Edite o arquivo `.dev.vars` e preencha as chaves necessárias:
 
     ```env
-    MARKET_API_KEY="sua_chave_market_api"
     CORS_ORIGIN="http://localhost:3000"
-    CURRENCY_API_KEY="sua_chave_currency_api"
     ```
 
 ## ⚡ Como Executar

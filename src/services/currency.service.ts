@@ -9,6 +9,9 @@ const currencyCodeMap = {
 
 function calculateMidMarketPrice(bid: string, ask: string) {
   const mid = (Number(bid) + Number(ask)) / 2
+  if (mid < 0.1) {
+    return mid.toFixed(3)
+  }
   return mid.toFixed(2)
 }
 
@@ -19,5 +22,6 @@ export async function getMidMarketCurrencyRates() {
     name: currencyCodeMap[c.code],
     rate: calculateMidMarketPrice(c.bid, c.ask),
     pctChange: Number(c.pctChange).toFixed(3),
+    referenceDatetime: c.create_date,
   }))
 }

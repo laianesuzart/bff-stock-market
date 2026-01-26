@@ -7,8 +7,8 @@ const app = new Hono()
 app.get(
   '/majors',
   cache({
-    cacheName: 'tickers-list',
-    cacheControl: 'max-age=3600',
+    cacheName: 'currency',
+    cacheControl: 'max-age=14400',
   }),
   async (c) => {
     const currencies = await getMidMarketCurrencyRates()

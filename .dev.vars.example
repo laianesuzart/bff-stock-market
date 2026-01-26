@@ -1,3 +1,1 @@
-MARKET_API_KEY=""
 CORS_ORIGIN=http://localhost:3000
-CURRENCY_API_KEY=""

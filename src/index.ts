@@ -13,8 +13,6 @@ const app = new Hono<{ Bindings: Bindings }>().basePath('/api')
 app.use('*', async (c, next) => {
   const envSchema = z.object({
     CORS_ORIGIN: z.string(),
-    MARKET_API_KEY: z.string(),
-    CURRENCY_API_KEY: z.string(),
   })
 
   const env = envSchema.safeParse(c.env)
