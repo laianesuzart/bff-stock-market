@@ -48,7 +48,6 @@ export async function getStockWithHistory(
     const diff = maxLen - prices.length
 
     const padding = diff > 0 ? new Array(diff).fill(null) : []
-    console.log({ diff, name: stock.symbol })
     return {
       ...stock,
       history: [...padding, ...prices],
