@@ -1,5 +1,5 @@
 import { HTTPException } from 'hono/http-exception'
-import { fetchStockQuote } from '../providers/stock.provider'
+import { fetchStockQuote, fetchTickers } from '../providers/stock.provider'
 import { calculateRange } from '../utils/date.utils'
 
 export async function getStockWithHistory(
@@ -75,4 +75,10 @@ export async function getStockWithHistory(
   })
 
   return { symbols, stockQueryPeriod, results }
+}
+
+export async function getTickerList(type: string) {
+  const data = await fetchTickers(type)
+
+  return data.tickers.filter((ticker) => !ticker.endsWith('F'))
 }

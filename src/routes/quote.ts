@@ -2,9 +2,8 @@ import { sValidator } from '@hono/standard-validator'
 import { Hono } from 'hono'
 import { cache } from 'hono/cache'
 import { z } from 'zod'
-import { getStockWithHistory } from '../services/stock.service'
+import { getStockWithHistory, getTickerList } from '../services/stock.service'
 import { normalizeDate } from '../utils/date.utils'
-import { fetchTickers } from '../providers/stock.provider'
 
 const app = new Hono()
 
@@ -21,8 +20,8 @@ app.get(
   }),
   async (c) => {
     const { type } = c.req.valid('query')
-    const data = await fetchTickers(type)
-    return c.json(data)
+    const tickers = await getTickerList(type)
+    return c.json({ tickers })
   },
 )
 
