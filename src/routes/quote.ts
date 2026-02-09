@@ -4,17 +4,25 @@ import { cache } from 'hono/cache'
 import { z } from 'zod'
 import { getStockWithHistory } from '../services/stock.service'
 import { normalizeDate } from '../utils/date.utils'
+import { fetchTickers } from '../providers/stock.provider'
 
 const app = new Hono()
 
+const tickerTypeSchema = z.object({
+  type: z.enum(['stock', 'fund', 'bdr']),
+})
+
 app.get(
   '/tickers',
+  sValidator('query', tickerTypeSchema),
   cache({
     cacheName: 'tickers-list',
     cacheControl: 'max-age=86400',
   }),
   async (c) => {
-    return c.json({ tickers: ['ITUB4', 'MGLU3', 'PETR4', 'VALE3'] })
+    const { type } = c.req.valid('query')
+    const data = await fetchTickers(type)
+    return c.json(data)
   },
 )
 

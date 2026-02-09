@@ -1,10 +1,12 @@
 type Request = {
   endpoint: string
+  token?: string
   cacheTtl?: number
 }
 
 export async function requestMarketData<T>({
   endpoint,
+  token,
   cacheTtl,
 }: Request): Promise<T> {
   const response = await fetch(endpoint, {
@@ -12,6 +14,13 @@ export async function requestMarketData<T>({
       cacheTtl: cacheTtl ?? 4 * 60 * 60,
       cacheEverything: true,
     },
+     ...(token
+      ? {
+          headers: {
+           Authorization: `Bearer ${token}`
+          },
+        }
+      : {}),
   })
 
   if (!response.ok) {

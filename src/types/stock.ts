@@ -11,3 +11,12 @@ export type QuoteRespose = {
     }[]
   }[]
 }
+
+export type StockListResponse = {
+  stocks: {
+    stock: string
+    sector: string
+    type: string
+  }[]
+  availableStockTypes: string[]
+}

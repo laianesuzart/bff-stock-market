@@ -1,3 +1,4 @@
+import { HTTPException } from 'hono/http-exception'
 import { fetchStockQuote } from '../providers/stock.provider'
 import { calculateRange } from '../utils/date.utils'
 
@@ -9,9 +10,15 @@ export async function getStockWithHistory(
   const range = calculateRange(start)
   const symbols = tickers.split(',')
 
+  if (symbols.length > 20) {
+    throw new HTTPException(400, {
+      message: `Symbols length: ${symbols.length}. Max length: 20`,
+    })
+  }
+
   const res = await fetchStockQuote(tickers, range)
 
-  const filteredResults = res.map((stock, index) => {
+  const filteredResults = res.map((stock) => {
     const filteredHistory = stock.history.filter((h) => {
       const isAfterStart = h.date >= start
       const isBeforeEnd = h.date <= end

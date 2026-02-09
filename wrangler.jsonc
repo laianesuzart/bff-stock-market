@@ -8,7 +8,8 @@
   ],
   "vars": {
     "MARKET_API_BASE_URL": "https://brapi.dev/api",
-    "CURRENCY_API_BASE_URL": "https://economia.awesomeapi.com.br"
+    "CURRENCY_API_BASE_URL": "https://economia.awesomeapi.com.br",
+    "TZ": "America/Sao_Paulo"
   },
   "observability": {
     "enabled": true
