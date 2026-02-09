@@ -50,14 +50,27 @@ export async function getStockWithHistory(
         )
       : []
 
-  const results = filteredResults.map((stock) => {
-    const prices = stock.history.map((h) => h.price)
-    const diff = maxLen - prices.length
+  const dateIndexMap = new Map<number, number>()
 
-    const padding = diff > 0 ? new Array(diff).fill(null) : []
+  if (maxLenIndex !== -1) {
+    filteredResults[maxLenIndex].history.forEach((h, index) => {
+      dateIndexMap.set(h.date.getTime(), index)
+    })
+  }
+
+  const results = filteredResults.map((stock) => {
+    const prices = new Array(maxLen).fill(null)
+
+    stock.history.forEach((h) => {
+      const index = dateIndexMap.get(h.date.getTime())
+      if (index !== undefined) {
+        prices[index] = h.price
+      }
+    })
+
     return {
       ...stock,
-      history: [...padding, ...prices],
+      history: prices,
     }
   })
 
