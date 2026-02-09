@@ -14,10 +14,10 @@ const tickerTypeSchema = z.object({
 app.get(
   '/tickers',
   sValidator('query', tickerTypeSchema),
-  cache({
-    cacheName: 'tickers-list',
-    cacheControl: 'max-age=86400',
-  }),
+  // cache({
+  //   cacheName: 'tickers-list',
+  //   cacheControl: 'max-age=86400',
+  // }),
   async (c) => {
     const { type } = c.req.valid('query')
     const tickers = await getTickerList(type)
